@@ -1,6 +1,6 @@
 
 """
-Django settings for recruitment_project project.
+Django settings for recruitment_project.
 
 AI-Powered HR Recruitment Assistant
 """
@@ -8,26 +8,25 @@ AI-Powered HR Recruitment Assistant
 import os
 from pathlib import Path
 
-# --------------------------------------------------
+
+# ==========================================
 # BASE DIRECTORY
-# --------------------------------------------------
+# ==========================================
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# --------------------------------------------------
+# ==========================================
 # SECURITY SETTINGS
-# --------------------------------------------------
+# ==========================================
 
-# Never hardcode the secret key in public GitHub code.
+# Set this using an environment variable.
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
-# Debug mode is disabled by default.
 DEBUG = os.environ.get(
     "DJANGO_DEBUG", "False"
 ).lower() == "true"
 
-# Allowed domains
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get(
@@ -37,10 +36,19 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+# Configure this for the deployed HTTPS domain.
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "DJANGO_CSRF_TRUSTED_ORIGINS", ""
+    ).split(",")
+    if origin.strip()
+]
 
-# --------------------------------------------------
-# APPLICATION DEFINITION
-# --------------------------------------------------
+
+# ==========================================
+# INSTALLED APPLICATIONS
+# ==========================================
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -50,17 +58,21 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Recruitment Application
+    # Recruitment application
     "recruitment",
 ]
 
 
-# --------------------------------------------------
+# ==========================================
 # MIDDLEWARE
-# --------------------------------------------------
+# ==========================================
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+
+    # Serve static files in production
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -70,16 +82,16 @@ MIDDLEWARE = [
 ]
 
 
-# --------------------------------------------------
+# ==========================================
 # URL CONFIGURATION
-# --------------------------------------------------
+# ==========================================
 
 ROOT_URLCONF = "recruitment_project.urls"
 
 
-# --------------------------------------------------
+# ==========================================
 # TEMPLATES
-# --------------------------------------------------
+# ==========================================
 
 TEMPLATES = [
     {
@@ -88,6 +100,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -97,16 +110,16 @@ TEMPLATES = [
 ]
 
 
-# --------------------------------------------------
-# WSGI CONFIGURATION
-# --------------------------------------------------
+# ==========================================
+# WSGI APPLICATION
+# ==========================================
 
 WSGI_APPLICATION = "recruitment_project.wsgi.application"
 
 
-# --------------------------------------------------
+# ==========================================
 # DATABASE
-# --------------------------------------------------
+# ==========================================
 
 DATABASES = {
     "default": {
@@ -116,9 +129,9 @@ DATABASES = {
 }
 
 
-# --------------------------------------------------
+# ==========================================
 # PASSWORD VALIDATION
-# --------------------------------------------------
+# ==========================================
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -148,51 +161,69 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# --------------------------------------------------
+# ==========================================
 # INTERNATIONALIZATION
-# --------------------------------------------------
+# ==========================================
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 
 USE_TZ = True
 
 
-# --------------------------------------------------
-# STATIC FILES
-# --------------------------------------------------
+# ==========================================
+# STATIC FILES - CSS / JS / IMAGES
+# ==========================================
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+STORAGES = {
+    "default": {
+        "BACKEND": (
+            "django.core.files.storage."
+            "FileSystemStorage"
+        ),
+    },
+    "staticfiles": {
+        "BACKEND": (
+            "whitenoise.storage."
+            "CompressedManifestStaticFilesStorage"
+        ),
+    },
+}
 
-# --------------------------------------------------
-# MEDIA FILES / RESUME UPLOADS
-# --------------------------------------------------
+
+# ==========================================
+# MEDIA FILES - RESUME UPLOADS
+# ==========================================
 
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = BASE_DIR / "media"
 
 
-# --------------------------------------------------
+# ==========================================
 # EMAIL CONFIGURATION
-# --------------------------------------------------
+# ==========================================
 
 MAILERS = {
     "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
+        "BACKEND": (
+            "django.core.mail.backends."
+            "console.EmailBackend"
+        ),
     },
 }
 
 
-# --------------------------------------------------
-# LOGIN / LOGOUT SETTINGS
-# --------------------------------------------------
+# ==========================================
+# AUTHENTICATION
+# ==========================================
 
 LOGIN_URL = "login"
 
@@ -201,8 +232,29 @@ LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "login"
 
 
-# --------------------------------------------------
+# ==========================================
 # DEFAULT PRIMARY KEY
-# --------------------------------------------------
+# ==========================================
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# ==========================================
+# PRODUCTION SECURITY
+# ==========================================
+
+SESSION_COOKIE_HTTPONLY = True
+
+CSRF_COOKIE_HTTPONLY = True
+
+X_FRAME_OPTIONS = "DENY"
+
+# Enable HTTPS-specific protections in production.
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = (
+        "HTTP_X_FORWARDED_PROTO",
+        "https",
+    )

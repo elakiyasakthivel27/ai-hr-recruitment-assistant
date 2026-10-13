@@ -10,3 +10,5 @@ media/
 resumes/
 *.exe
 test_resume.pdf
+
+/staticfiles/
