@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidate Management | Vision Orbit</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="{% static 'recruitment/css/candidate_list.css' %}">
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+ <div class="brand">
+  <div class="brand-logo" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="24" stroke="#00D9FF" stroke-width="1.6" opacity=".85"/><ellipse cx="32" cy="32" rx="24" ry="10" transform="rotate(-32 32 32)" stroke="#4DEBFF" stroke-width="1.5" opacity=".85"/><ellipse cx="32" cy="32" rx="12" ry="24" transform="rotate(29 32 32)" stroke="#188DFF" stroke-width="1.4" opacity=".8"/><path d="M17 18L40 15L48 33L32 46L15 37L17 18ZM17 18L32 30L40 15M32 30L48 33M32 30L32 46M32 30L15 37" stroke="#63EAFF" stroke-width="1.6"/><circle cx="17" cy="18" r="3.1" fill="#6FF6FF"/><circle cx="40" cy="15" r="3.1" fill="#5CDFFF"/><circle cx="48" cy="33" r="3.2" fill="#69F8FF"/><circle cx="32" cy="46" r="3.1" fill="#36BFFF"/><circle cx="15" cy="37" r="3.1" fill="#48E9FF"/><circle cx="32" cy="30" r="3.5" fill="#D0FFFF"/></svg></div>
+  <div><div class="brand-name">VISION ORBIT</div><div class="brand-sub">AI Recruitment Assistant</div></div>
+ </div>
+ <div class="nav-scroll">
+  <div class="nav-label">WORKSPACE</div>
+  <a class="nav-link" href="{% url 'dashboard' %}"><span class="nav-ico">▦</span>Dashboard</a>
+  <a class="nav-link" href="{% url 'upload_resume' %}"><span class="nav-ico">＋</span>Upload Resume</a>
+  <a class="nav-link active" href="{% url 'candidate_list' %}" aria-current="page"><span class="nav-ico">♙</span>Candidates</a>
+  <a class="nav-link" href="{% url 'compare_candidates' %}"><span class="nav-ico">⇄</span>Compare Candidates</a>
+  <div class="nav-label" style="margin-top:17px">MANAGEMENT</div>
+  <a class="nav-link" href="{% url 'manage_jobs' %}"><span class="nav-ico">▤</span>Manage Jobs</a>
+  {% if request.user.is_staff %}<a class="nav-link" href="{% url 'admin:index' %}"><span class="nav-ico">↗</span>Django Admin</a>{% endif %}
+ </div>
+ <div class="account">
+<button class="account-box" id="sidebar-account-toggle" type="button" aria-expanded="false" aria-controls="sidebar-account-menu">
+<div class="avatar">{{ request.user.username|slice:':2'|upper }}</div>
+<div class="account-copy"><div class="account-name">{{ request.user.username|default:'HR User' }}</div><div class="account-role">Recruitment Workspace</div></div><span class="account-chevron">⌄</span>
+</button><div class="account-popover" id="sidebar-account-menu" hidden>
+ <div class="popover-label">SIGNED IN AS</div>
+ <div class="popover-name">{{ request.user.get_full_name|default:request.user.username }}</div>
+ <div class="popover-email">{{ request.user.email|default:"Email not provided" }}</div>
+ <div class="popover-divider"></div>
+ <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="popover-action danger" type="submit">↪ &nbsp; Log out</button></form>
+ </div></div>
+</aside>
+<main class="main">
+   <div class="background-art" aria-hidden="true"><div class="background-wave"></div></div><div class="ambient-bottom" aria-hidden="true"><svg viewBox="0 0 560 330" preserveAspectRatio="none"><path d="M-60 340 C160 315 385 230 600 35"/><path d="M70 390 C280 350 435 240 640 140"/></svg></div>
+ <div class="topbar">
+  <a class="back" href="{% url 'dashboard' %}"><span aria-hidden="true">←</span> Back to Dashboard</a>
+  <div class="top-account-wrap"><button class="hello account-top-button" id="top-account-toggle" type="button" aria-expanded="false" aria-controls="top-account-menu"><div class="hello-text"><div class="hello-title">👋 Hello, <strong>{{ request.user.username|default:'Admin'|capfirst }}</strong></div><div class="date" id="today-date"></div></div><div class="avatar">{{ request.user.username|slice:':2'|upper }}</div></button><div class="top-account-popover" id="top-account-menu" hidden>
+ <div class="popover-label">SIGNED IN AS</div>
+ <div class="popover-name">{{ request.user.get_full_name|default:request.user.username }}</div>
+ <div class="popover-email">{{ request.user.email|default:"Email not provided" }}</div>
+ <div class="popover-divider"></div>
+ <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="popover-action danger" type="submit">↪ &nbsp; Log out</button></form>
+ </div></div>
+ </div>
+ <div class="hero"><div class="eyebrow">RECRUITMENT WORKSPACE / CANDIDATE DIRECTORY</div><h1>CANDIDATE MANAGEMENT</h1></div>
+ <section class="stats" aria-label="Candidate overview">
+  <div class="stat"><div class="stat-top">Total Candidates <span class="stat-icon">♟</span></div><div class="stat-value">{{ total_candidates }}</div></div>
+  <div class="stat"><div class="stat-top">Job Openings <span class="stat-icon">▤</span></div><div class="stat-value">{{ jobs|length }}</div></div>
+  <div class="stat"><div class="stat-top">Recruitment Workspace <span class="stat-icon">◎</span></div><div class="stat-value" style="font-size:22px;color:#92bdff">Active</div></div>
+ </section>
+ <section class="panel">
+  <div class="panel-header"><h2><span class="section-icon" aria-hidden="true">⌕</span> Find Candidates</h2><span class="hint">Search and refine your candidate results</span></div>
+  <form method="GET" class="filters">
+   <div class="field"><label for="q">Search by name, email or job</label><input id="q" type="search" name="q" value="{{ search_query|default:'' }}" placeholder="Search candidates, jobs..."></div>
+   <div class="field"><label for="job">Filter by job</label><select id="job" name="job"><option value="">All Job Openings</option>{% for job in jobs %}<option value="{{ job.id }}" {% if selected_job == job.id|stringformat:'s' %}selected{% endif %}>{{ job.title }}</option>{% endfor %}</select></div>
+   <div class="field"><label for="min_score">Minimum match (%)</label><input id="min_score" type="number" name="min_score" min="0" max="100" step="1" value="{{ min_score|default:'' }}" placeholder="e.g. 70"></div>
+   <div class="filter-actions"><button type="submit" class="btn btn-primary">Apply Filters</button><a class="btn btn-reset" href="{% url 'candidate_list' %}">Reset</a></div>
+  </form>
+ </section>
+ <section class="panel">
+  <div class="panel-header"><h2><span class="section-icon" aria-hidden="true">♟</span> Candidate Directory</h2><span class="count">{{ candidates|length }} displayed</span></div>
+  <div class="table-wrap"><table>
+   <thead><tr><th>Candidate</th><th>Applied Role</th><th>Match Score</th><th>Matched Skills</th><th>Missing Skills</th><th>Resume</th></tr></thead>
+   <tbody>
+    {% for candidate in candidates %}
+    <tr>
+     <td><div class="candidate-person"><span class="candidate-number" aria-label="Candidate number {{ forloop.counter }}">{{ forloop.counter|stringformat:"02d" }}</span><div><div class="candidate-name">{{ candidate.name }}</div><div class="email">{{ candidate.email }}</div></div></div></td>
+     <td><div class="job-title">{{ candidate.job.title }}</div></td>
+     <td><span class="score {% if candidate.match_score < 50 %}low{% elif candidate.match_score < 70 %}medium{% endif %}">{{ candidate.match_score|floatformat:0 }}% Match</span></td>
+     <td class="skills skill-cell" data-skill-type="matched">{{ candidate.matched_skills|default:'Not available' }}</td>
+     <td class="skills skill-cell" data-skill-type="missing">{{ candidate.missing_skills|default:'Not available' }}</td>
+     <td>{% if candidate.resume %}<a class="pdf-link" href="{% url 'candidate_resume' candidate.pk %}" target="_blank" rel="noopener noreferrer">▤ View PDF</a>{% else %}<span class="hint">Not available</span>{% endif %}</td>
+    </tr>
+    {% empty %}<tr><td colspan="6" class="empty">No candidates found. Upload a resume or adjust your filters.</td></tr>{% endfor %}
+   </tbody>
+  </table></div>
+ </section>
+ <footer class="footer">© 2026 Vision Orbit Innovations · AI Recruitment Assistant</footer>
+</main>
+</div>
+
+<script src="{% static 'recruitment/js/candidate_list.js' %}" defer></script>
+</body>
+</html>

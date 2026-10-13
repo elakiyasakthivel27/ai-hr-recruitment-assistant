@@ -1,0 +1,354 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Vision Orbit AI Recruitment Assistant — intelligent resume screening, skill matching, candidate insights and comparison.">
+<title>Vision Orbit | AI Recruitment Assistant</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'recruitment/css/home.css' %}">
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<header class="navbar">
+    <div class="container nav-inner">
+        <a href="{% url 'home' %}" class="brand" aria-label="Vision Orbit Home">
+            <span class="brand-logo">
+                <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                    <circle cx="32" cy="32" r="24" stroke="#00D9FF" stroke-width="1.6"/>
+                    <ellipse cx="32" cy="32" rx="24" ry="10" transform="rotate(-32 32 32)" stroke="#4DEBFF" stroke-width="1.5"/>
+                    <ellipse cx="32" cy="32" rx="12" ry="24" transform="rotate(29 32 32)" stroke="#188DFF" stroke-width="1.4"/>
+                    <path d="M17 18L40 15L48 33L32 46L15 37L17 18ZM17 18L32 30L40 15M32 30L48 33M32 30L32 46M32 30L15 37" stroke="#63EAFF" stroke-width="1.6"/>
+                    <circle cx="17" cy="18" r="3" fill="#6FF6FF"/>
+                    <circle cx="40" cy="15" r="3" fill="#5CDFFF"/>
+                    <circle cx="48" cy="33" r="3" fill="#69F8FF"/>
+                    <circle cx="32" cy="46" r="3" fill="#36BFFF"/>
+                    <circle cx="15" cy="37" r="3" fill="#48E9FF"/>
+                    <circle cx="32" cy="30" r="3.5" fill="#D0FFFF"/>
+                </svg>
+            </span>
+            <span>
+                <span class="brand-title">VISION ORBIT</span>
+                <span class="brand-subtitle">AI Recruitment Assistant</span>
+            </span>
+        </a>
+
+        <nav class="nav-links" aria-label="Main navigation">
+            <a class="nav-section" href="#features">Features</a>
+            <a class="nav-section" href="#how-it-works">How It Works</a>
+
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="btn btn-primary nav-login">
+                    Dashboard →
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary nav-login">
+                    HR Login →
+                </a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="section hero">
+    <div class="orbit-ring one"></div>
+    <div class="orbit-ring two"></div>
+    <div class="orbit-ring three"></div>
+    <div class="orbit-glow"></div>
+
+    <div class="container section-inner hero-grid">
+        <div class="hero-content">
+            <div class="eyebrow">✦ AI-POWERED RECRUITMENT PLATFORM</div>
+
+            <h1>
+                Smarter Hiring.<br>
+                <span class="gradient-text">Stronger Teams.</span>
+            </h1>
+
+            <p class="hero-description">
+                Simplify recruitment with intelligent resume screening,
+                skill gap analysis, candidate ranking and actionable insights.
+                Help your HR team make more informed hiring decisions.
+            </p>
+
+            <div class="hero-actions">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary">
+                        Open HR Dashboard ↗
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">
+                        HR Login →
+                    </a>
+                {% endif %}
+
+                <a href="#features" class="btn btn-glass">
+                    Explore Features ↓
+                </a>
+            </div>
+
+            <div class="hero-benefits">
+                <span><i>✓</i> Faster Screening</span>
+                <span><i>✓</i> Skill-Based Matching</span>
+                <span><i>✓</i> Structured Insights</span>
+            </div>
+        </div>
+
+        <div class="preview" aria-label="Illustrative recruitment dashboard preview">
+            <div class="preview-top">
+                <div class="preview-dots"><i></i><i></i><i></i></div>
+                <span class="preview-title">VISION ORBIT / RECRUITMENT</span>
+                <span class="live-badge">● SYSTEM READY</span>
+            </div>
+
+            <h3>Recruitment Overview</h3>
+            <div class="preview-caption">Illustrative dashboard preview</div>
+
+            <div class="preview-stats">
+                <div class="preview-stat">
+                    <strong>24</strong>
+                    <span>Candidates</span>
+                </div>
+                <div class="preview-stat">
+                    <strong>08</strong>
+                    <span>Open Jobs</span>
+                </div>
+                <div class="preview-stat">
+                    <strong>76%</strong>
+                    <span>Avg. Match</span>
+                </div>
+            </div>
+
+            <div class="preview-row">
+                <span class="preview-person">
+                    <span class="avatar">AK</span>
+                    Candidate A
+                </span>
+                <span class="score">92% Match</span>
+            </div>
+
+            <div class="preview-row">
+                <span class="preview-person">
+                    <span class="avatar">SR</span>
+                    Candidate B
+                </span>
+                <span class="score">83% Match</span>
+            </div>
+
+            <div class="preview-row">
+                <span class="preview-person">
+                    <span class="avatar">RJ</span>
+                    Candidate C
+                </span>
+                <span class="score medium">64% Match</span>
+            </div>
+
+            <div class="preview-footer">
+                Sample data for product illustration only
+            </div>
+        </div>
+    </div>
+
+    <div class="wave-bottom" aria-hidden="true">
+        <svg viewBox="0 0 1440 125" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="heroWave" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#1681ff"/>
+                    <stop offset="52%" stop-color="#4377ef"/>
+                    <stop offset="100%" stop-color="#925eff"/>
+                </linearGradient>
+            </defs>
+            <path d="M0 34 C230 125 440 40 700 75 S1150 125 1440 30 L1440 125 L0 125 Z"
+                  fill="#10294e"/>
+            <path d="M0 34 C230 125 440 40 700 75 S1150 125 1440 30"
+                  fill="none" stroke="url(#heroWave)" stroke-width="3"/>
+        </svg>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section features" id="features">
+    <div class="container section-inner">
+        <div class="section-heading">
+            <div class="section-kicker">Platform Capabilities</div>
+            <h2>
+                Everything your
+                <span class="gradient-text">recruitment team needs</span>
+            </h2>
+            <p>
+                From job creation to candidate evaluation, bring your
+                screening workflow into one organized workspace.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <article class="feature-card">
+                <div class="feature-icon">▤</div>
+                <h3>Job Management</h3>
+                <p>Create and manage job descriptions and track candidates against role-specific requirements.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon purple">▣</div>
+                <h3>Resume Screening</h3>
+                <p>Upload candidate resumes and extract relevant information for structured screening.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon cyan">◎</div>
+                <h3>Skill Matching</h3>
+                <p>Compare detected resume skills against job descriptions and calculate a skill coverage score.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon">◈</div>
+                <h3>Skill Gap Analysis</h3>
+                <p>Identify job-related skills that were detected or not identified in each candidate's resume.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon purple">✦</div>
+                <h3>Candidate Insights</h3>
+                <p>View candidate summaries and suggested interview questions to guide further evaluation.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon cyan">⇄</div>
+                <h3>Candidate Comparison</h3>
+                <p>Review multiple candidate profiles and compare their screening results in one place.</p>
+            </article>
+        </div>
+    </div>
+
+    <div class="wave-bottom" aria-hidden="true">
+        <svg viewBox="0 0 1440 125" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="featureWave" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#327dff"/>
+                    <stop offset="55%" stop-color="#a077ff"/>
+                    <stop offset="100%" stop-color="#4a9cff"/>
+                </linearGradient>
+            </defs>
+            <path d="M0 70 C280 5 480 100 730 55 S1200 0 1440 65 L1440 125 L0 125 Z"
+                  fill="#171e61"/>
+            <path d="M0 70 C280 5 480 100 730 55 S1200 0 1440 65"
+                  fill="none" stroke="url(#featureWave)" stroke-width="3"/>
+        </svg>
+    </div>
+</section>
+
+<!-- WORKFLOW -->
+<section class="section workflow" id="how-it-works">
+    <div class="container section-inner">
+        <div class="section-heading">
+            <div class="section-kicker">Simple Workflow</div>
+            <h2>
+                Four steps to
+                <span class="gradient-text">smarter screening</span>
+            </h2>
+            <p>
+                Designed to help recruiters focus on the most
+                relevant candidate information.
+            </p>
+        </div>
+
+        <div class="workflow-steps">
+            <article class="step">
+                <div class="step-top">
+                    <span class="step-number">01</span>
+                    <span class="step-icon">▤</span>
+                </div>
+                <h3>Create a Job</h3>
+                <p>Add a job title and description with the skills required for the role.</p>
+            </article>
+
+            <article class="step">
+                <div class="step-top">
+                    <span class="step-number">02</span>
+                    <span class="step-icon">↑</span>
+                </div>
+                <h3>Upload Resumes</h3>
+                <p>Upload candidate resumes for text extraction and screening.</p>
+            </article>
+
+            <article class="step">
+                <div class="step-top">
+                    <span class="step-number">03</span>
+                    <span class="step-icon">✦</span>
+                </div>
+                <h3>Analyze Skills</h3>
+                <p>Review skill matches, potential gaps and generated screening insights.</p>
+            </article>
+
+            <article class="step">
+                <div class="step-top">
+                    <span class="step-number">04</span>
+                    <span class="step-icon">⇄</span>
+                </div>
+                <h3>Compare Candidates</h3>
+                <p>Use screening results to support a structured human review process.</p>
+            </article>
+        </div>
+    </div>
+
+    <div class="wave-bottom" aria-hidden="true">
+        <svg viewBox="0 0 1440 125" preserveAspectRatio="none">
+            <path d="M0 60 C280 135 480 10 760 60 S1170 125 1440 40 L1440 125 L0 125 Z"
+                  fill="#071a37"/>
+            <path d="M0 60 C280 135 480 10 760 60 S1170 125 1440 40"
+                  fill="none" stroke="#639bff" stroke-opacity=".7" stroke-width="2"/>
+        </svg>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta-section">
+    <div class="container section-inner">
+        <div class="cta-box">
+            <div class="cta-content">
+                <h2>
+                    Ready to simplify your
+                    <span class="gradient-text">hiring workflow?</span>
+                </h2>
+                <p>
+                    Access your recruiter workspace and start managing
+                    jobs, resumes and candidate insights.
+                </p>
+
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary">
+                        Go to Dashboard →
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">
+                        HR Login →
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="footer">
+    <div class="container footer-inner">
+        <span><strong>VISION ORBIT</strong> · AI Recruitment Assistant</span>
+        <span>© 2026 Vision Orbit · Screening insights support human hiring decisions.</span>
+    </div>
+</footer>
+
+<script src="{% static 'recruitment/js/home.js' %}" defer></script>
+</body>
+</html>

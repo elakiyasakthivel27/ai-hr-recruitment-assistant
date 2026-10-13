@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Job | Vision Orbit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #172033;
+            margin: 0;
+            padding: 30px 16px;
+        }
+        main {
+            max-width: 700px;
+            margin: 30px auto;
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+        }
+        label { display: block; font-weight: bold; margin: 18px 0 8px; }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            box-sizing: border-box;
+            font: inherit;
+        }
+        textarea { min-height: 180px; resize: vertical; }
+        button, a {
+            display: inline-block;
+            padding: 11px 16px;
+            margin-top: 18px;
+            border: 0;
+            border-radius: 7px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font: inherit;
+        }
+        a { background: #64748b; margin-left: 8px; }
+        .message { background: #eff6ff; padding: 12px; margin: 8px 0; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Edit Job Opening</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="title">Job Title</label>
+        <input id="title" type="text" name="title"
+               value="{{ job.title }}" required>
+
+        <label for="description">Job Description and Required Skills</label>
+        <textarea id="description" name="description"
+                  required>{{ job.description }}</textarea>
+
+        <button type="submit">Save Changes</button>
+        <a href="{% url 'manage_jobs' %}">Cancel</a>
+    </form>
+</main>
+</body>
+</html>

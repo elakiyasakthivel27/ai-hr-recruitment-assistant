@@ -1,0 +1,217 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vision Orbit secure HR login portal">
+    <title>HR Login | Vision Orbit</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'recruitment/css/login.css' %}">
+</head>
+
+<body>
+<div class="page">
+
+    <div class="orbit"></div>
+    <div class="orbit two"></div>
+
+    <!-- NAVBAR -->
+
+    <header class="nav">
+        <a href="{% url 'home' %}" class="brand">
+            <span class="brand-icon">
+                <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                    <circle cx="32" cy="32" r="24" stroke="#00D9FF" stroke-width="1.6"/>
+                    <ellipse cx="32" cy="32" rx="24" ry="10"
+                             transform="rotate(-32 32 32)"
+                             stroke="#4DEBFF" stroke-width="1.5"/>
+                    <ellipse cx="32" cy="32" rx="12" ry="24"
+                             transform="rotate(29 32 32)"
+                             stroke="#188DFF" stroke-width="1.4"/>
+                    <path d="M17 18L40 15L48 33L32 46L15 37L17 18ZM17 18L32 30L40 15M32 30L48 33M32 30L32 46M32 30L15 37"
+                          stroke="#63EAFF" stroke-width="1.6"/>
+                    <circle cx="17" cy="18" r="3" fill="#6FF6FF"/>
+                    <circle cx="40" cy="15" r="3" fill="#5CDFFF"/>
+                    <circle cx="48" cy="33" r="3" fill="#69F8FF"/>
+                    <circle cx="32" cy="46" r="3" fill="#36BFFF"/>
+                    <circle cx="15" cy="37" r="3" fill="#48E9FF"/>
+                    <circle cx="32" cy="30" r="3.5" fill="#D0FFFF"/>
+                </svg>
+            </span>
+
+            <span>
+                <span class="brand-name">VISION ORBIT</span>
+                <span class="brand-caption">AI Recruitment Assistant</span>
+            </span>
+        </a>
+
+        <a href="{% url 'home' %}" class="back">
+            ← Back to Home
+        </a>
+    </header>
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <!-- LEFT INTRO -->
+
+        <section class="intro">
+            <span class="intro-tag">
+                ✦ RECRUITER WORKSPACE
+            </span>
+
+            <h1>
+                Welcome back to<br>
+                <span class="gradient">smarter hiring.</span>
+            </h1>
+
+            <p>
+                Your recruitment command center is ready.
+                Manage jobs, screen resumes and evaluate candidates
+                through one intelligent, organized workspace.
+            </p>
+
+            <div class="benefits">
+                <div class="benefit">
+                    <span class="benefit-icon">◎</span>
+                    Intelligent resume screening
+                </div>
+
+                <div class="benefit">
+                    <span class="benefit-icon">✦</span>
+                    Skill gap analysis and insights
+                </div>
+
+                <div class="benefit">
+                    <span class="benefit-icon">⇄</span>
+                    Structured candidate comparison
+                </div>
+            </div>
+
+            <div class="orbit-art" aria-hidden="true">
+                <svg viewBox="0 0 260 155" fill="none">
+                    <ellipse cx="128" cy="78" rx="115" ry="36"
+                             transform="rotate(-22 128 78)"
+                             stroke="#927cff" stroke-width="2"/>
+                    <ellipse cx="128" cy="78" rx="50" ry="75"
+                             transform="rotate(25 128 78)"
+                             stroke="#4d9eff" stroke-width="1.5"/>
+                    <circle cx="128" cy="78" r="54"
+                            stroke="#35d9ff" stroke-width="1.5"/>
+                    <circle cx="128" cy="78" r="14"
+                            fill="#39d5fa" fill-opacity=".18"
+                            stroke="#7ceeff" stroke-width="2"/>
+                    <circle cx="128" cy="78" r="5" fill="#a6f6ff"/>
+                    <circle cx="33" cy="110" r="6" fill="#ae89ff"/>
+                    <circle cx="205" cy="36" r="5" fill="#65dfff"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- LOGIN CARD -->
+
+        <section class="login-card" aria-labelledby="login-heading">
+
+            <span class="card-tag">Secure HR Access</span>
+
+            <h2 id="login-heading">HR Login</h2>
+
+            <p class="card-description">
+                Sign in to continue to your recruitment dashboard.
+            </p>
+
+            {% if form.errors %}
+                <div class="error" role="alert">
+                    Invalid username or password. Please try again.
+                </div>
+            {% endif %}
+
+            {% if next and user.is_authenticated %}
+                <div class="error" role="alert">
+                    Your account does not have access to that page.
+                </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                <div class="field">
+                    <label for="username">Username</label>
+
+                    <div class="input-wrap">
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            value="{{ form.username.value|default_if_none:'' }}"
+                            required
+                            autofocus
+                        >
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+
+                    <div class="input-wrap">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="password-input"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="show-password"
+                            id="togglePassword"
+                            aria-label="Show password"
+                            aria-pressed="false"
+                        >
+                            Show
+                        </button>
+                    </div>
+                </div>
+
+                <input type="hidden" name="next" value="{{ next }}">
+
+                <button type="submit" class="submit-btn">
+                    Sign In to Dashboard →
+                </button>
+            </form>
+
+            <div class="secure-note">
+                <span>◈</span>
+                Authorized recruiter access only
+            </div>
+
+            <div class="divider">VISION ORBIT</div>
+
+            <div class="card-bottom">
+                AI-assisted screening insights support human decisions.
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="footer">
+        © 2026 Vision Orbit · AI Recruitment Assistant
+    </footer>
+</div>
+
+<script src="{% static 'recruitment/js/login.js' %}" defer></script>
+
+</body>
+</html>

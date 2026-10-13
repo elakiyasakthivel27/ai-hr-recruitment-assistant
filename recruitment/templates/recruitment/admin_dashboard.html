@@ -1,0 +1,67 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Overview | Vision Orbit Innovations</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,"Segoe UI",Arial,sans-serif}
+body{background:#f5f6fb;color:#20243a}
+header{height:75px;background:#19182f;color:white;display:flex;align-items:center;justify-content:space-between;padding:0 7%}
+.logo{font-size:22px;font-weight:800}
+.logo span{color:#a7a0ff}
+header a{color:#deddf6;text-decoration:none;font-size:13px}
+main{max-width:1100px;margin:42px auto;padding:0 22px}
+.eyebrow{color:#5b4dde;font-size:11px;letter-spacing:1.4px;font-weight:800}
+h1{font-size:29px;margin:14px 0 9px}
+.subtitle{font-size:13px;color:#8b90a2;line-height:1.7;margin-bottom:28px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.card{background:white;border:1px solid #e7e9f2;border-radius:14px;padding:24px}
+.card .label{font-size:12px;color:#858b9c}
+.value{font-size:31px;font-weight:800;margin:15px 0 7px}
+.note{font-size:11px;color:#999eae}
+.actions{margin-top:25px;background:white;border:1px solid #e7e9f2;border-radius:14px;padding:25px}
+.actions h2{font-size:17px;margin-bottom:8px}
+.actions p{font-size:12px;color:#8b90a2;margin-bottom:22px}
+.links{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.link{display:block;border:1px solid #e7e8f3;border-radius:10px;padding:18px;text-decoration:none;color:#282844}
+.link:hover{border-color:#6b5ce7;background:#fafaff}
+.link strong{font-size:13px;display:block;margin-bottom:8px}
+.link span{font-size:12px;color:#888fa0;line-height:1.6}
+.warning{background:#f0efff;color:#5043bf;border-radius:10px;padding:16px;margin-top:22px;font-size:12px;line-height:1.8}
+@media(max-width:650px){main{padding:0 14px}.cards{grid-template-columns:1fr}.links{grid-template-columns:1fr}header{padding:0 16px}}
+</style>
+</head>
+<body>
+<header>
+```html
+<div class="logo">VISION <span>ORBIT INNOVATIONS</span></div>
+ <small style="font-size:12px;font-weight:400">/ Admin</small></div>
+<a href="/">← Return to Recruitment Dashboard</a>
+</header>
+<main>
+<div class="eyebrow">SYSTEM OVERVIEW</div>
+<h1>Administration</h1>
+<p class="subtitle">Manage job openings, candidate records, and recruitment screening data.</p>
+
+<section class="cards">
+<div class="card"><div class="label">Registered Candidates</div><div class="value">{{ total_candidates|default:"0" }}</div><div class="note">Candidate records stored</div></div>
+<div class="card"><div class="label">Job Openings</div><div class="value">{{ total_jobs|default:"0" }}</div><div class="note">Configured job roles</div></div>
+<div class="card"><div class="label">Average Match Score</div><div class="value">{{ average_score|floatformat:0|default:"0" }}%</div><div class="note">Calculated across candidates</div></div>
+</section>
+
+<section class="actions">
+<h2>Management tools</h2>
+<p>Open the appropriate workspace to manage your recruitment data.</p>
+<div class="links">
+<a class="link" href="/admin/"><strong>Django Admin ↗</strong><span>Add, edit, and delete jobs and candidate records.</span></a>
+<a class="link" href="/"><strong>Recruitment Dashboard ↗</strong><span>Review applicants and filter their match scores.</span></a>
+<a class="link" href="/candidates/upload/"><strong>Upload Resume ↗</strong><span>Add a candidate and evaluate their resume.</span></a>
+</div>
+<div class="warning"><strong>Admin access:</strong> The Django Admin link requires a staff or superuser account. This overview page does not itself grant administrative permissions.</div>
+</section>
+</main>
+</body>
+</html>
+```

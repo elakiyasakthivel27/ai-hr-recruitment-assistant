@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Compare Candidates | Vision Orbit</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="{% static 'recruitment/css/compare_candidates.css' %}"></head><body><div class="app"><aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="32" cy="32" r="24" stroke="#00D9FF" stroke-width="1.6" opacity=".85"/>
+                    <ellipse cx="32" cy="32" rx="24" ry="10" transform="rotate(-32 32 32)" stroke="#4DEBFF" stroke-width="1.5" opacity=".85"/>
+                    <ellipse cx="32" cy="32" rx="12" ry="24" transform="rotate(29 32 32)" stroke="#188DFF" stroke-width="1.4" opacity=".8"/>
+                    <path d="M17 18L40 15L48 33L32 46L15 37L17 18ZM17 18L32 30L40 15M32 30L48 33M32 30L32 46M32 30L15 37" stroke="#63EAFF" stroke-width="1.6" stroke-linejoin="round"/>
+                    <circle cx="17" cy="18" r="3.1" fill="#6FF6FF"/>
+                    <circle cx="40" cy="15" r="3.1" fill="#5CDFFF"/>
+                    <circle cx="48" cy="33" r="3.2" fill="#69F8FF"/>
+                    <circle cx="32" cy="46" r="3.1" fill="#36BFFF"/>
+                    <circle cx="15" cy="37" r="3.1" fill="#48E9FF"/>
+                    <circle cx="32" cy="30" r="3.5" fill="#D0FFFF"/>
+                </svg>
+            </div>
+
+            <div class="brand-text">
+                <div class="brand-name">VISION ORBIT</div>
+                <div class="brand-subtitle">AI Recruitment Assistant</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Main navigation">
+
+            <div class="nav-heading">Workspace</div>
+
+            <a href="{% url 'dashboard' %}" class="nav-link">
+                <span class="nav-icon">▦</span>
+                Dashboard
+            </a>
+
+            <a href="{% url 'upload_resume' %}" class="nav-link">
+                <span class="nav-icon">＋</span>
+                Upload Resume
+            </a>
+
+            <a href="{% url 'candidate_list' %}" class="nav-link">
+                <span class="nav-icon">♙</span>
+                Candidates
+            </a>
+
+            <a href="{% url 'compare_candidates' %}" class="nav-link active">
+                <span class="nav-icon">⇄</span>
+                Compare Candidates
+            </a>
+
+            <div class="nav-heading">Management</div>
+
+            <a href="{% url 'manage_jobs' %}" class="nav-link">
+                <span class="nav-icon">▤</span>
+                Manage Jobs
+            </a>
+
+            {% if request.user.is_staff %}
+            <a
+                href="/admin/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="nav-link"
+            >
+                <span class="nav-icon">↗</span>
+                Django Admin
+            </a>
+            {% endif %}
+
+        </nav>
+
+        <!-- CLICK ANYWHERE ON PROFILE -->
+        <div class="sidebar-bottom">
+
+            <button
+                type="button"
+                class="sidebar-account"
+                id="accountToggle"
+                aria-expanded="false"
+                aria-controls="accountDropdown"
+                aria-label="Open account menu"
+            >
+                <span class="avatar">
+                    {{ request.user.username|slice:":2"|upper }}
+                </span>
+
+                <span class="account-info">
+                    <span class="account-name">
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </span>
+
+                    <span class="account-role">
+                        {% if request.user.is_superuser %}
+                            System Administrator
+                        {% else %}
+                            HR Recruiter
+                        {% endif %}
+                    </span>
+                </span>
+
+                <span class="account-arrow" aria-hidden="true">⌄</span>
+            </button>
+
+            <!-- OPENS UPWARD -->
+            <div class="account-dropdown" id="accountDropdown" hidden>
+
+                <div class="account-dropdown-label">
+                    Signed in as
+                </div>
+
+                <div class="account-dropdown-name">
+                    {{ request.user.username }}
+                </div>
+
+                {% if request.user.email %}
+                <div class="account-dropdown-email">
+                    {{ request.user.email }}
+                </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="logout-button" type="submit">
+                        ↪ Logout
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </aside>
+<main class="main"><div class="background-art" aria-hidden="true"><div class="background-wave"></div></div><div class="lower-background-curves" aria-hidden="true"></div>
+<header class="topbar upload-topbar"><a class="upload-back-link" href="{% url 'dashboard' %}"><span aria-hidden="true">←</span> Back to Dashboard</a><div class="top-hr-wrap"><button type="button" class="upload-top-greeting top-hr-toggle" id="topHrToggle" aria-expanded="false" aria-controls="topHrMenu" aria-label="Open HR account menu"><div class="upload-greeting-copy"><div class="greeting"><span class="greeting-emoji" aria-hidden="true">👋</span> Hello, <span class="greeting-name">{{ request.user.first_name|default:request.user.username|title }}</span></div><div class="current-date" id="currentDate">Recruitment Workspace</div></div><div class="upload-admin-avatar" aria-hidden="true">{{ request.user.first_name|default:request.user.username|slice:":2"|upper }}</div></button><div class="top-hr-menu" id="topHrMenu" hidden><div class="top-hr-label">Signed in as</div><div class="top-hr-name">{{ request.user.username }}</div>{% if request.user.email %}<div class="top-hr-email">{{ request.user.email }}</div>{% endif %}<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit" class="top-hr-logout">↪ Log out</button></form></div></div></header>
+<div class="compare-content"><div class="compare-heading"><div class="upload-eyebrow">Recruitment Workspace / Candidate Evaluation</div><h1 class="upload-title">COMPARE CANDIDATES</h1><p class="compare-description">Compare skill matches, missing skills, and resume summaries side by side.</p></div>
+<section class="compare-panel"><h2>Select Candidates</h2><p class="compare-muted">Choose two applicants to compare their screening results.</p><form method="get" action="" id="compareForm"><div class="compare-fields"><div class="compare-field"><label for="candidate1">Candidate 01</label><select name="candidate1" id="candidate1" required><option value="">Select first candidate</option>{% for c in all_candidates %}<option value="{{ c.id }}" {% if candidate1 and c.id == candidate1.id %}selected{% endif %}>{{ c.name }} — {{ c.job.title }}</option>{% endfor %}</select></div><div class="compare-field"><label for="candidate2">Candidate 02</label><select name="candidate2" id="candidate2" required><option value="">Select second candidate</option>{% for c in all_candidates %}<option value="{{ c.id }}" {% if candidate2 and c.id == candidate2.id %}selected{% endif %}>{{ c.name }} — {{ c.job.title }}</option>{% endfor %}</select></div></div><p class="compare-error" id="compareError" role="alert">Please select two different candidates to compare.</p><button class="compare-action" type="submit">Compare Applicants →</button></form></section>
+{% if candidate1 and candidate2 %}<section class="compare-notice"><strong>✦ Screening Result</strong><div>{{ recommendation|default:"Review the candidate scores and skills below before making a hiring decision." }}</div><small>Match scores are rule-based skill matches, not a guarantee of job performance.</small></section>
+<section class="compare-panel"><h2>Comparison Report</h2><p class="compare-muted">Candidate information and calculated job-skill matches.</p><div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>Criteria</th><th>{{ candidate1.name }}</th><th>{{ candidate2.name }}</th></tr></thead><tbody><tr><td>Email</td><td>{{ candidate1.email }}</td><td>{{ candidate2.email }}</td></tr><tr><td>Job Role</td><td>{{ candidate1.job.title }}</td><td>{{ candidate2.job.title }}</td></tr><tr><td>Match Score</td><td><span class="compare-score">{{ candidate1.match_score|floatformat:0 }}%</span></td><td><span class="compare-score">{{ candidate2.match_score|floatformat:0 }}%</span></td></tr><tr><td>Matched Skills</td><td>{% for s in candidate1.matched_skills.split %}<span class="compare-skill">{{ s }}</span>{% empty %}<span class="compare-empty">No skills recorded</span>{% endfor %}</td><td>{% for s in candidate2.matched_skills.split %}<span class="compare-skill">{{ s }}</span>{% empty %}<span class="compare-empty">No skills recorded</span>{% endfor %}</td></tr><tr><td>Missing Skills</td><td>{% for s in candidate1.missing_skills.split %}<span class="compare-skill missing">{{ s }}</span>{% empty %}<span class="compare-empty">None recorded</span>{% endfor %}</td><td>{% for s in candidate2.missing_skills.split %}<span class="compare-skill missing">{{ s }}</span>{% empty %}<span class="compare-empty">None recorded</span>{% endfor %}</td></tr><tr><td>Resume Summary</td><td class="compare-summary">{{ summary1|default:"No resume text available." }}</td><td class="compare-summary">{{ summary2|default:"No resume text available." }}</td></tr><tr><td>Resume File</td><td>{% if candidate1.resume %}<a class="compare-resume" href="{{ candidate1.resume.url }}" target="_blank" rel="noopener">View PDF ↗</a>{% else %}<span class="compare-empty">Not available</span>{% endif %}</td><td>{% if candidate2.resume %}<a class="compare-resume" href="{{ candidate2.resume.url }}" target="_blank" rel="noopener">View PDF ↗</a>{% else %}<span class="compare-empty">Not available</span>{% endif %}</td></tr></tbody></table></div></section>{% endif %}
+<div class="compare-footer">© 2026 Vision Orbit Innovations · AI Recruitment Assistant</div></div></main></div>
+<script src="{% static 'recruitment/js/compare_candidates.js' %}" defer></script></body></html>

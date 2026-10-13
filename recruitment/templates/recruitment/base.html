@@ -1,0 +1,51 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vision Orbit Recruitment Assistant{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'recruitment/css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<header class="site-header">
+    <div class="nav-container">
+        <a href="{% url 'home' %}" class="brand">
+            <img src="{% static 'recruitment/images/company-logo.png' %}"
+                 alt="Vision Orbit Logo">
+            <span>Vision Orbit<br>Recruitment Assistant</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'manage_jobs' %}">Manage Jobs</a>
+            <a href="{% url 'candidate_list' %}">Candidates</a>
+            <a href="{% url 'upload_resume' %}">Upload Resume</a>
+            <a href="{% url 'compare_candidates' %}">Compare</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer class="site-footer">
+    Vision Orbit Recruitment Assistant
+    <br>
+    Resume screening and recruitment management
+</footer>
+
+</body>
+</html>
