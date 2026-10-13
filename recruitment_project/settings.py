@@ -20,7 +20,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY SETTINGS
 # ==========================================
 
-# Set this using an environment variable.
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 DEBUG = os.environ.get(
@@ -36,7 +35,6 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
-# Configure this for the deployed HTTPS domain.
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
@@ -69,10 +67,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-
-    # Serve static files in production
     "whitenoise.middleware.WhiteNoiseMiddleware",
-
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -184,10 +179,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STORAGES = {
     "default": {
-        "BACKEND": (
-            "django.core.files.storage."
-            "FileSystemStorage"
-        ),
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
         "BACKEND": (
@@ -208,17 +200,30 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 
 # ==========================================
-# EMAIL CONFIGURATION
+# EMAIL CONFIGURATION - DJANGO 6.1
 # ==========================================
 
-MAILERS = {
-    "default": {
-        "BACKEND": (
-            "django.core.mail.backends."
-            "console.EmailBackend"
-        ),
-    },
-}
+if DEBUG:
+    MAILERS = {
+        "default": {
+            "BACKEND": (
+                "django.core.mail.backends.console.EmailBackend"
+            ),
+        },
+    }
+else:
+    MAILERS = {
+        "default": {
+            "BACKEND": (
+                "django.core.mail.backends.smtp.EmailBackend"
+            ),
+            "HOST": os.environ.get("EMAIL_HOST", "localhost"),
+            "PORT": int(os.environ.get("EMAIL_PORT", "587")),
+            "USERNAME": os.environ.get("EMAIL_HOST_USER", ""),
+            "PASSWORD": os.environ.get("EMAIL_HOST_PASSWORD", ""),
+            "USE_TLS": True,
+        },
+    }
 
 
 # ==========================================
@@ -249,12 +254,18 @@ CSRF_COOKIE_HTTPONLY = True
 
 X_FRAME_OPTIONS = "DENY"
 
-# Enable HTTPS-specific protections in production.
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
+
     SESSION_COOKIE_SECURE = True
+
     CSRF_COOKIE_SECURE = True
+
+    # Trust HTTPS forwarded by Render proxy
     SECURE_PROXY_SSL_HEADER = (
         "HTTP_X_FORWARDED_PROTO",
         "https",
     )
+
+    # Enable HSTS only after verifying HTTPS.
+    SECURE_HSTS_SECONDS = 0
